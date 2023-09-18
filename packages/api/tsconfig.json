@@ -1,0 +1,4 @@
+{
+  "extends": "tsconfig/monorepo-library.json",
+  "include": ["src"]
+}
