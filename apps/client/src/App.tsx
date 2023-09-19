@@ -1,26 +1,28 @@
-import { useState } from "react";
 import { DragDropContext, type DropResult } from "react-beautiful-dnd";
 import useFetch from "./hooks/useFetch"
 import "./App.css";
 import type { Todo } from "../../model";
 import InputField from "./components/InputField/InputField";
 import TodoList from "./components/TodoList";
+import React from "react";
 
-interface TodosApiResponse {
-  todoList: Todo[],
+export interface TodosApiResponse {
+  data?: Todo[],
+  error: string,
+  isPending: boolean,
+  setData: React.Dispatch<React.SetStateAction<Todo[]>>,
 };
 
 export const App: React.FC = () => {
-  // const { todoList } = useFetch<TodosApiResponse>('api/todos');
+  const { data: todos, setData: setTodos } = useFetch<TodosApiResponse>('api/todos');
 
-  const [todo, setTodo] = useState<string>("");
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [completedTodos, setCompletedTodos] = useState<Todo[]>([]);
+  const [todo, setTodo] = React.useState<string>("");
+  const [completedTodos, setCompletedTodos] = React.useState<Todo[]>([]);
 
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault();
     if (todo) {
-      setTodos([...todos, { id: Date.now(), todo, isDone: false}]);
+      setTodos((todos) => [...todos, { id: Date.now(), todo, isDone: false}]);
       setTodo("");
     }
   };
@@ -37,7 +39,7 @@ export const App: React.FC = () => {
     const active = todos;
     const complete = completedTodos;
 
-    if (source.droppableId === "TodosList") {
+    if (active && source.droppableId === "TodosList") {
       add = active[source.index];
       active.splice(source.index, 1);
     } else {
@@ -45,32 +47,35 @@ export const App: React.FC = () => {
       complete.splice(source.index, 1);
     }
 
-    if (destination.droppableId === "TodosList") {
+    if (active && destination.droppableId === "TodosList") {
       active.splice(destination.index, 0, add as Todo);
     } else {
       complete.splice(destination.index, 0, add as Todo);
     }
 
     setCompletedTodos(complete);
-    setTodo(active);
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div className='App'>
-        <h2 className='heading'>TODO List</h2>
-        <InputField
-          todo={todo}
-          setTodo={setTodo}
-          handleAdd={handleAdd}
-        />
-        <TodoList
-          todos={todos}
-          setTodos={setTodos}
-          completedTodos={completedTodos}
-          setCompletedTodos={setCompletedTodos}
-        />
-      </div>
-    </DragDropContext>
+    <div>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className='App'>
+          <h2 className='heading'>TODO List</h2>
+          <InputField
+            todo={todo}
+            setTodo={setTodo}
+            handleAdd={handleAdd}
+          />
+          {todos && 
+            <TodoList
+              todos={todos}
+              setTodos={setTodos}
+              completedTodos={completedTodos}
+              setCompletedTodos={setCompletedTodos}
+            />
+          }
+        </div>
+      </DragDropContext>
+    </div>
   );
 };

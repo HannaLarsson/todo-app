@@ -8,6 +8,7 @@ const useFetch = <T,>(url: string) => {
   useEffect(() => {
     const abortCtrl = new AbortController();
 
+    // Temporary, just for loading effect
     setTimeout(() => {
       fetch(url, { signal: abortCtrl.signal }).then(res => {
         console.log('i fetch', url, res);
@@ -16,7 +17,6 @@ const useFetch = <T,>(url: string) => {
         }
         return res.json();
       }).then(data => {
-        console.log('i then');
         setData(data);
         setIsPending(false);
         setError('');
@@ -35,7 +35,7 @@ const useFetch = <T,>(url: string) => {
     return () => abortCtrl.abort();
   }, [url]);
 
-  return { data, isPending, error } as T;
+  return { data, isPending, error, setData } as T;
 }
 
 export default useFetch;
