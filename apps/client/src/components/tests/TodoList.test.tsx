@@ -18,14 +18,23 @@ const todoNotDone: Todo = {
 
 describe("Todo List", () => {
   beforeEach(() => {
-    render(<DragDropContext onDragEnd={() => {}}><TodoList setTodos={() => {}} todos={[todoNotDone]} completedTodos={[todoDone]} setCompletedTodos={() => {}} /></DragDropContext>);
+    render(
+      <DragDropContext onDragEnd={() => {}}>
+        <TodoList
+          setTodos={() => {}}
+          todos={[todoNotDone]}
+          completedTodos={[todoDone]}
+          setCompletedTodos={() => {}}
+        />
+      </DragDropContext>,
+    );
   });
 
-  test('should show a todo card with doneTodo', () => {
+  test("should show a todo card with doneTodo", () => {
     expect(screen.getByText("doneTodo")).toBeDefined();
   });
 
-  test('should show a todo card with notDoneTodo', () => {
+  test("should show a todo card with notDoneTodo", () => {
     expect(screen.getByText("notDoneTodo")).toBeDefined();
   });
 });
