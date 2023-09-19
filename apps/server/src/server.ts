@@ -6,6 +6,10 @@ import type { Todo } from "../../model";
 const apiRouter = () => {
   const router = express.Router();
 
+  router.get('/', (_req, res) => {
+    res.json('Hello, world!');
+  });
+
   router.get("/todos", (_req, res) => {
     const todos: Todo[] = data.todos.map((todo) => ({
       id: todo.id,
