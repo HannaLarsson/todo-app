@@ -1,28 +1,18 @@
 import express from 'express';
 import morgan from 'morgan';
-import { v4 as uuidv4 } from 'uuid';
-
-import { EMOJI_KIND, type Emoji } from 'api';
-
-export const randomEmoji = (): Emoji['kind'] => {
-  const randomIndex = Math.floor(Math.random() * EMOJI_KIND.length);
-  // Typecasted since we know that the index is within bounds
-  return EMOJI_KIND[randomIndex] as Emoji['kind'];
-};
+import data from '../db.json';
+import type { Todo } from "../../model";
 
 const apiRouter = () => {
   const router = express.Router();
-  router.get('/', (_req, res) => {
-    res.json('Hello, world!');
-  });
 
-  router.get('/emoji', (_req, res) => {
-    const emojiObject: Emoji = {
-      id: uuidv4(),
-      kind: randomEmoji(),
-      timestamp: new Date().toISOString(),
-    };
-    res.json(emojiObject);
+  router.get('/todos', (_req, res) => {
+    const todos: Todo[] = data.todos.map(todo => ({
+      id: todo.id,
+      todo: todo.todo,
+      isDone: todo.isDone,
+    }));
+    res.json(todos);
   });
 
   return router;
