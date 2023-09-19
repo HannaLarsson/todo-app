@@ -1,1 +1,1 @@
-export const EMOJI_KIND = ['😀', '😃', '😄', '😁', '😆', '😅', '😂'] as const;
+export const EMOJI_KIND = ["😀", "😃", "😄", "😁", "😆", "😅", "😂"] as const;

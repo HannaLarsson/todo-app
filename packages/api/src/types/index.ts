@@ -1,1 +1,1 @@
-export * from './emojiTypes';
+export * from "./emojiTypes";

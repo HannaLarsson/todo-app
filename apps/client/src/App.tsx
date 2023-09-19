@@ -1,5 +1,5 @@
 import { DragDropContext, type DropResult } from "react-beautiful-dnd";
-import useFetch from "./hooks/useFetch"
+import useFetch from "./hooks/useFetch";
 import "./App.css";
 import type { Todo } from "../../model";
 import InputField from "./components/InputField/InputField";
@@ -7,14 +7,15 @@ import TodoList from "./components/TodoList";
 import React from "react";
 
 export interface TodosApiResponse {
-  data?: Todo[],
-  error: string,
-  isPending: boolean,
-  setData: React.Dispatch<React.SetStateAction<Todo[]>>,
-};
+  data?: Todo[];
+  error: string;
+  isPending: boolean;
+  setData: React.Dispatch<React.SetStateAction<Todo[]>>;
+}
 
 export const App: React.FC = () => {
-  const { data: todos, setData: setTodos } = useFetch<TodosApiResponse>('api/todos');
+  const { data: todos, setData: setTodos } =
+    useFetch<TodosApiResponse>("api/todos");
 
   const [todo, setTodo] = React.useState<string>("");
   const [completedTodos, setCompletedTodos] = React.useState<Todo[]>([]);
@@ -22,17 +23,20 @@ export const App: React.FC = () => {
   const handleAdd = (e: React.FormEvent) => {
     e.preventDefault();
     if (todo) {
-      setTodos((todos) => [...todos, { id: Date.now(), todo, isDone: false}]);
+      setTodos((todos) => [...todos, { id: Date.now(), todo, isDone: false }]);
       setTodo("");
     }
   };
 
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result;
-    if (!destination){
+    if (!destination) {
       return;
     }
-    if (destination.droppableId === source.droppableId && destination.index === source.index) {
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
       return;
     }
     let add;
@@ -59,21 +63,17 @@ export const App: React.FC = () => {
   return (
     <div>
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className='App'>
-          <h2 className='heading'>TODO List</h2>
-          <InputField
-            todo={todo}
-            setTodo={setTodo}
-            handleAdd={handleAdd}
-          />
-          {todos && 
+        <div className="App">
+          <h2 className="heading">TODO List</h2>
+          <InputField todo={todo} setTodo={setTodo} handleAdd={handleAdd} />
+          {todos && (
             <TodoList
               todos={todos}
               setTodos={setTodos}
               completedTodos={completedTodos}
               setCompletedTodos={setCompletedTodos}
             />
-          }
+          )}
         </div>
       </DragDropContext>
     </div>

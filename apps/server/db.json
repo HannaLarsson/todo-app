@@ -1,6 +1,6 @@
-{ 
-  "todos" : [
-    { "id": 0, "todo": "Hannas första uppgift", "isDone": false},
-    { "id": 1, "todo": "Hannas andra uppgift", "isDone": false}
+{
+  "todos": [
+    { "id": 0, "todo": "Hannas första uppgift", "isDone": false },
+    { "id": 1, "todo": "Hannas andra uppgift", "isDone": false }
   ]
 }

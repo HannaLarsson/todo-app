@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
-import { AiFillEdit, AiFillDelete } from 'react-icons/ai';
-import { MdDone } from 'react-icons/md';
-import type { Todo } from '../../../model';
+import { AiFillEdit, AiFillDelete } from "react-icons/ai";
+import { MdDone } from "react-icons/md";
+import type { Todo } from "../../../model";
 
 interface Props {
   index: number;
@@ -11,7 +11,7 @@ interface Props {
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
 }
 
-const SingleTodo = ({index, todo, todos, setTodos}: Props) => {
+const SingleTodo = ({ index, todo, todos, setTodos }: Props) => {
   const [edit, setEdit] = useState<boolean>(false);
   const [editTodo, setEditTodo] = useState<string>(todo.todo);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -22,78 +22,66 @@ const SingleTodo = ({index, todo, todos, setTodos}: Props) => {
 
   const handleDone = (id: number) => {
     setTodos(
-      todos.map(
-        (todo) => todo.id === id ? {...todo, isDone: !todo.isDone} : todo));
+      todos.map((todo) =>
+        todo.id === id ? { ...todo, isDone: !todo.isDone } : todo,
+      ),
+    );
   };
 
   const handleDelete = (id: number) => {
-    setTodos(
-      todos.filter((todo) => todo.id !== id)
-    );
+    setTodos(todos.filter((todo) => todo.id !== id));
   };
 
   const handleEdit = (e: React.FormEvent, id: number) => {
     e.preventDefault();
-    const todo = 
-      todos.map(
-        (todo) => todo.id === id ? {...todo, todo: editTodo} : todo);
+    const todo = todos.map((todo) =>
+      todo.id === id ? { ...todo, todo: editTodo } : todo,
+    );
     setTodos(todo);
     setEdit(false);
   };
 
   return (
-    <Draggable
-      draggableId={todo.id.toString()}
-      index={index}
-    >
+    <Draggable draggableId={todo.id.toString()} index={index}>
       {(provided, snapshot) => (
         <form
-          className={`todos__single ${snapshot.isDragging ? "drag" : "" }`}
+          className={`todos__single ${snapshot.isDragging ? "drag" : ""}`}
           onSubmit={(e) => handleEdit(e, todo.id)}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
         >
-        {
-          edit ? (
+          {edit ? (
             <input
               ref={inputRef}
               value={editTodo}
               onChange={(e) => setEditTodo(e.target.value)}
-              className='todos__single--text'
+              className="todos__single--text"
             />
+          ) : todo.isDone ? (
+            <s className="todos__single--text">{todo.todo}</s>
           ) : (
-            todo.isDone ? 
-              ( <s className='todos__single--text'>{todo.todo}</s>):
-              (<span className='todos__single--text'>{todo.todo}</span>)
-          )
-        }
-          <span className='icon'>
+            <span className="todos__single--text">{todo.todo}</span>
+          )}
+          <span className="icon">
             <AiFillEdit
-              onClick = {
-                () => {
-                  if(!edit && !todo.isDone)
-                    {
-                      setEdit(!edit);
-                    }
+              onClick={() => {
+                if (!edit && !todo.isDone) {
+                  setEdit(!edit);
                 }
-              }
+              }}
             />
           </span>
-          <span className='icon'>
-            <AiFillDelete
-              onClick={() => handleDelete(todo.id)}
-            />
+          <span className="icon">
+            <AiFillDelete onClick={() => handleDelete(todo.id)} />
           </span>
-          <span className='icon'>
-            <MdDone
-              onClick={() => handleDone(todo.id)}
-            />
+          <span className="icon">
+            <MdDone onClick={() => handleDone(todo.id)} />
           </span>
-      </form>
+        </form>
       )}
     </Draggable>
-  )
-}
+  );
+};
 
-export default SingleTodo
+export default SingleTodo;

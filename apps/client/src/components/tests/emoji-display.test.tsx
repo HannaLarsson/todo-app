@@ -1,15 +1,15 @@
-import { beforeEach, describe, expect, test } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import type { Emoji } from 'api';
-import { EmojiDisplay } from '../emoji-display';
+import { beforeEach, describe, expect, test } from "vitest";
+import { render, screen } from "@testing-library/react";
+import type { Emoji } from "api";
+import { EmojiDisplay } from "../emoji-display";
 
 const mockEmojiObject: Emoji = {
-  id: 'mock',
-  kind: '😀',
+  id: "mock",
+  kind: "😀",
   timestamp: new Date().toISOString(),
 };
 
-describe('Emoji Display', () => {
+describe("Emoji Display", () => {
   beforeEach(() => {
     render(<EmojiDisplay emoji={mockEmojiObject} />);
   });
